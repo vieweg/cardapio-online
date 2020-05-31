@@ -18,15 +18,8 @@ interface IFoodPlate {
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleUpdateFood: (food: Omit<IFoodPlate, 'id' | 'available'>) => void;
+  handleUpdateFood: (food: IFoodPlate) => void;
   editingFood: IFoodPlate;
-}
-
-interface IEditFoodData {
-  name: string;
-  image: string;
-  price: string;
-  description: string;
 }
 
 const ModalEditFood: React.FC<IModalProps> = ({
@@ -38,10 +31,13 @@ const ModalEditFood: React.FC<IModalProps> = ({
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
-    async (data: IEditFoodData) => {
-      // EDIT A FOOD PLATE AND CLOSE THE MODAL
+    async (data: IFoodPlate) => {
+      const food = { ...editingFood, ...data };
+      // console.log(food);
+      handleUpdateFood(food);
+      setIsOpen();
     },
-    [handleUpdateFood, setIsOpen],
+    [handleUpdateFood, setIsOpen, editingFood],
   );
 
   return (
